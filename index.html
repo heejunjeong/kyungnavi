@@ -6,7 +6,7 @@
   <title>KyungNavi</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* 기존 스타일 (생략 가능) */
+    /* 동일한 스타일 (생략 가능) */
     body {
       font-family: 'Roboto', Arial, sans-serif;
       background: linear-gradient(135deg, #e3f2fd, #90caf9);
@@ -21,10 +21,29 @@
     .info-bar { /* 동일한 스타일 */ }
     .floor-buttons { /* 동일한 스타일 */ }
     .modal { /* 동일한 스타일 */ }
+    .modal h2 { margin-bottom: 20px; font-size: 20px; color: #1565c0; }
+    .modal button { /* 동일한 버튼 스타일 */ }
+    .modal video {
+      width: 100%;
+      max-height: 250px;
+      border-radius: 10px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover { color: #333; }
   </style>
 </head>
 <body>
-  <div class="top-bar" data-translate="title">KyungNavi</div>
+  <div class="top-bar">KyungNavi</div>
   <div class="info-bar">
     <div class="language-buttons">
       <button data-lang="ko">한국어</button>
@@ -32,7 +51,7 @@
       <button data-lang="zh">中文</button>
       <button data-lang="ja">日本語</button>
     </div>
-    <div class="visitor-count" data-translate="visitor">일일 방문객: <span id="visitor-count">0</span>명</div>
+    <div class="visitor-count">일일 방문객: <span id="visitor-count">0</span>명</div>
   </div>
   <div class="floor-buttons">
     <button class="floor-button" data-floor="1F">1F</button>
@@ -49,114 +68,90 @@
     <button class="close-btn" onclick="closeVideo()">X</button>
   </div>
   <script>
-    // 번역 데이터
-    const translations = {
-      ko: {
-        title: "경비게이션",
-        visitor: "일일 방문객: ",
-        floorSelection: "{floor} 도착지 선택",
-        startSelection: "시작점 선택 (도착지: {destination})"
+    const state = { currentFloor: null, selectedDestination: null, selectedStartPoint: null };
+    const destinationData = {
+      "1F": ["101", "국제처"],
+      "2F": ["도착지3", "도착지4"],
+      "3F": ["대학혁신자원", "국제어학센터"],
+      "B1F": ["B04", "교육대학원행정실"]
+    };
+    const videoData = {
+      "1F": {
+        "101": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/1F_101_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/1F_101_3F.mp4"
+        },
+        "국제처": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/1F_국제처_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/1F_국제처_3F.mp4"
+        }
       },
-      en: {
-        title: "KyungNavi",
-        visitor: "Daily Visitors: ",
-        floorSelection: "Select Destination on {floor}",
-        startSelection: "Select Starting Point (Destination: {destination})"
+      "2F": {
+        "도착지3": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/2F_도착지3_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/2F_도착지3_3F.mp4"
+        },
+        "도착지4": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/2F_도착지4_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/2F_도착지4_3F.mp4"
+        }
       },
-      zh: {
-        title: "庆导航",
-        visitor: "每日访客: ",
-        floorSelection: "{floor} 选择目的地",
-        startSelection: "选择起点 (目的地: {destination})"
+      "3F": {
+        "대학혁신자원": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/3F_대학혁신자원_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/3F_대학혁신자원_3F.mp4"
+        },
+        "국제어학센터": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/3F_국제어학센터_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/3F_국제어학센터_3F.mp4"
+        }
       },
-      ja: {
-        title: "慶ナビ",
-        visitor: "訪問者数: ",
-        floorSelection: "{floor} の目的地を選択",
-        startSelection: "出発地点を選択 (目的地: {destination})"
+      "B1F": {
+        "B04": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/B1F_B04_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/B1F_B04_3F.mp4"
+        },
+        "교육대학원행정실": {
+          "1F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/B1F_교육대학원행정실_1F.mp4",
+          "3F": "https://raw.githubusercontent.com/heejunjeong/kyungnavi/main/videos/B1F_교육대학원행정실_3F.mp4"
+        }
       }
     };
 
-    const state = {
-      currentLang: 'ko', // 기본 언어
-      currentFloor: null,
-      selectedDestination: null,
-      selectedStartPoint: null
-    };
-
-    // 방문자 수 증가 및 저장
-    let visitorCount = localStorage.getItem('visitorCount') || 0;
-    visitorCount++;
-    localStorage.setItem('visitorCount', visitorCount);
-    document.getElementById('visitor-count').innerText = visitorCount;
-
-    // 번역 적용
-    function applyTranslations() {
-      const lang = state.currentLang;
-      document.querySelectorAll('[data-translate]').forEach((element) => {
-        const key = element.dataset.translate;
-        let text = translations[lang][key];
-        if (key === "floorSelection" && state.currentFloor) {
-          text = text.replace("{floor}", state.currentFloor);
-        }
-        if (key === "startSelection" && state.selectedDestination) {
-          text = text.replace("{destination}", state.selectedDestination);
-        }
-        element.textContent = text;
-      });
-    }
-
-    // 언어 변경 이벤트
-    document.querySelectorAll('[data-lang]').forEach((button) => {
-      button.addEventListener('click', () => {
-        state.currentLang = button.dataset.lang;
-        applyTranslations();
-      });
-    });
-
-    // 층, 목적지, 시작점 버튼 동작
     document.addEventListener('click', (event) => {
       if (event.target.matches('.floor-button')) {
-        const floor = event.target.dataset.floor;
-        showDestinationButtons(floor);
+        showDestinationButtons(event.target.dataset.floor);
       } else if (event.target.matches('.destination-button')) {
-        const destination = event.target.dataset.destination;
-        showStartSelection(destination);
+        showStartSelection(event.target.dataset.destination);
       } else if (event.target.matches('.start-point-btn')) {
-        const startPoint = event.target.dataset.start;
-        playVideo(startPoint);
+        playVideo(event.target.dataset.start);
       }
     });
 
-    // 층 선택 모달 표시
     function showDestinationButtons(floor) {
       state.currentFloor = floor;
       const destinations = destinationData[floor] || [];
       const mapContainer = document.getElementById('map-container');
       mapContainer.innerHTML = `
-        <h2 data-translate="floorSelection">${floor} 도착지 선택</h2>
+        <h2>${floor} 도착지 선택</h2>
         ${destinations.map(dest => `<button class="destination-button" data-destination="${dest}">${dest}</button>`).join("")}
         <button class="close-btn" onclick="closeMap()">X</button>
       `;
       mapContainer.style.display = 'block';
-      applyTranslations();
     }
 
-    // 시작점 선택 모달 표시
     function showStartSelection(destination) {
       state.selectedDestination = destination;
       const startSelection = document.getElementById('start-selection');
       startSelection.innerHTML = `
-        <h2 data-translate="startSelection">시작점 선택 (도착지: ${destination})</h2>
+        <h2>시작점 선택 (도착지: ${destination})</h2>
         <button class="start-point-btn" data-start="1F">1F</button>
         <button class="start-point-btn" data-start="3F">3F</button>
         <button class="close-btn" onclick="closeStartSelection()">X</button>
       `;
       startSelection.style.display = 'block';
-      applyTranslations();
     }
 
-    // 동영상 재생
     function playVideo(startPoint) {
       const videoFile = videoData[state.currentFloor]?.[state.selectedDestination]?.[startPoint];
       if (!videoFile) {
@@ -170,7 +165,6 @@
       document.getElementById('video-container').style.display = 'block';
     }
 
-    // 닫기 기능
     function closeMap() {
       document.getElementById('map-container').style.display = 'none';
     }
