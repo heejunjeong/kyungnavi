@@ -168,23 +168,48 @@
     const state = { currentFloor: null, selectedDestination: null, selectedStartPoint: null };
     const destinationData = { "1F": ["101", "국제처"], "2F": ["도착지3", "도착지4"], "3F": ["대학혁신자원", "국제어학센터"], "B1F": ["B04", "교육대학원행정실"] };
     const videoData = {
-      "1F": {
-        "101": { "1F": "https://github.com/heejunjeong/kyungnavi/tree/a9f3ad94a33eb56df2a16e68f887f2d8b547fcf8/videos1F_101_1F.mp4", "3F": "https://github.com/heejunjeong/kyungnavi/tree/a9f3ad94a33eb56df2a16e68f887f2d8b547fcf8/videos1F_101_3F.mp4" },
-        "국제처": { "1F": "https://your-username.github.io/your-repository/videos/1F_국제처_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/1F_국제처_3F.mp4" }
-      },
-      "2F": {
-        "도착지3": { "1F": "https://your-username.github.io/your-repository/videos/2F_도착지3_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/2F_도착지3_3F.mp4" },
-        "도착지4": { "1F": "https://your-username.github.io/your-repository/videos/2F_도착지4_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/2F_도착지4_3F.mp4" }
-      },
-      "3F": {
-        "대학혁신자원": { "1F": "https://your-username.github.io/your-repository/videos/3F_대학혁신자원_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/3F_대학혁신자원_3F.mp4" },
-        "국제어학센터": { "1F": "https://your-username.github.io/your-repository/videos/3F_국제어학센터_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/3F_국제어학센터_3F.mp4" }
-      },
-      "B1F": {
-        "B04": { "1F": "https://your-username.github.io/your-repository/videos/B1F_B04_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/B1F_B04_3F.mp4" },
-        "교육대학원행정실": { "1F": "https://your-username.github.io/your-repository/videos/B1F_교육대학원행정실_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/B1F_교육대학원행정실_3F.mp4" }
-      }
-    };
+  "1F": {
+    "101": { 
+      "1F": "https://your-username.github.io/your-repository/videos/1F_101_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/1F_101_3F.mp4"
+    },
+    "국제처": { 
+      "1F": "https://your-username.github.io/your-repository/videos/1F_국제처_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/1F_국제처_3F.mp4"
+    }
+  },
+  "2F": {
+    "도착지3": { 
+      "1F": "https://your-username.github.io/your-repository/videos/2F_도착지3_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/2F_도착지3_3F.mp4"
+    },
+    "도착지4": { 
+      "1F": "https://your-username.github.io/your-repository/videos/2F_도착지4_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/2F_도착지4_3F.mp4"
+    }
+  },
+  "3F": {
+    "대학혁신자원": { 
+      "1F": "https://your-username.github.io/your-repository/videos/3F_대학혁신자원_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/3F_대학혁신자원_3F.mp4"
+    },
+    "국제어학센터": { 
+      "1F": "https://your-username.github.io/your-repository/videos/3F_국제어학센터_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/3F_국제어학센터_3F.mp4"
+    }
+  },
+  "B1F": {
+    "B04": { 
+      "1F": "https://your-username.github.io/your-repository/videos/B1F_B04_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/B1F_B04_3F.mp4"
+    },
+    "교육대학원행정실": { 
+      "1F": "https://your-username.github.io/your-repository/videos/B1F_교육대학원행정실_1F.mp4",
+      "3F": "https://your-username.github.io/your-repository/videos/B1F_교육대학원행정실_3F.mp4"
+    }
+  }
+};
+
 
     let visitorCount = localStorage.getItem('visitorCount') || 0;
     visitorCount++;
