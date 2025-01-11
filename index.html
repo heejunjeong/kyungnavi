@@ -158,105 +158,22 @@
     <button class="close-btn" onclick="closeVideo()">X</button>
   </div>
   <script>
-    const translations = {
-      ko: { title: "경비게이션", visitor: "일일 방문객: ", floorSelection: "도착지 선택", startSelection: "시작점 선택 (도착지: {destination})" },
-      en: { title: "Kyongvigation", visitor: "Daily Visitors: ", floorSelection: "Select Destination", startSelection: "Select Starting Point (Destination: {destination})" },
-      zh: { title: "庆导航器", visitor: "每日访客: ", floorSelection: "选择目的地", startSelection: "选择起点 (目的地: {destination})" },
-      ja: { title: "慶ナビゲーション", visitor: "訪問者数: ", floorSelection: "目的地を選択", startSelection: "出発地点を選択 (目的地: {destination})" },
-    };
-
-    const state = { currentFloor: null, selectedDestination: null, selectedStartPoint: null };
-    const destinationData = { "1F": ["101", "국제처"], "2F": ["207", "210"], "3F": ["대학혁신자원", "국제어학센터"], "B1F": ["B04", "교육대학원행정실"] };
     const videoData = {
       "1F": {
-        "101": { "1F": "videos/1F_101_1F.mp4", "3F": "videos/1F_101_3F.mp4" },
-        "국제처": { "1F": "videos/1F_국제처_1F.mp4", "3F": "videos/1F_국제처_3F.mp4" }
-      },
-      "2F": {
-        "207": { "1F": "videos/2F_207_1F.mp4", "3F": "videos/2F_207_3F.mp4" },
-        "210": { "1F": "videos/2F_210_1F.mp4", "3F": "videos/2F_210_3F.mp4" }
-      },
-      "3F": {
-        "대학혁신자원": { "1F": "videos/3F_대학혁신자원_1F.mp4", "3F": "videos/3F_대학혁신자원_3F.mp4" },
-        "국제어학센터": { "1F": "videos/3F_국제어학센터_1F.mp4", "3F": "videos/3F_국제어학센터_3F.mp4" }
-      },
-      "B1F": {
-        "B04": { "1F": "videos/B1F_B04_1F.mp4", "3F": "videos/B1F_B04_3F.mp4" },
-        "교육대학원행정실": { "1F": "videos/B1F_교육대학원행정실_1F.mp4", "3F": "videos/B1F_교육대학원행정실_3F.mp4" }
+        "101": { "1F": "https://your-username.github.io/your-repository/videos/1F_101_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/1F_101_3F.mp4" },
+        "국제처": { "1F": "https://your-username.github.io/your-repository/videos/1F_국제처_1F.mp4", "3F": "https://your-username.github.io/your-repository/videos/1F_국제처_3F.mp4" }
       }
+      // 다른 층 데이터 추가...
     };
-
-    let visitorCount = localStorage.getItem('visitorCount') || 0;
-    visitorCount++;
-    localStorage.setItem('visitorCount', visitorCount);
-    document.getElementById('visitor-count').innerText = visitorCount;
-
-    document.querySelectorAll('[data-lang]').forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('[data-lang]').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        applyTranslations();
-      });
-    });
-
-    function applyTranslations() {
-      const lang = document.querySelector('[data-lang].active')?.dataset.lang || 'ko';
-      document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.dataset.translate;
-        if (translations[lang] && translations[lang][key]) {
-          const translation = translations[lang][key];
-          el.innerHTML = key === "startSelection" && el.dataset.destination
-            ? translation.replace("{destination}", el.dataset.destination)
-            : translation;
-        }
-      });
-    }
-
-    document.addEventListener('click', (event) => {
-      if (event.target.matches('.floor-button')) showDestinationButtons(event.target.dataset.floor);
-      else if (event.target.matches('.destination-button')) showStartSelection(event.target.dataset.destination);
-      else if (event.target.matches('.start-point-btn')) playVideo(event.target.dataset.start);
-    });
-
-    function showDestinationButtons(floor) {
-      state.currentFloor = floor;
-      const destinations = destinationData[floor] || [];
-      const mapContainer = document.getElementById('map-container');
-      mapContainer.innerHTML = `
-        <h2 data-translate="floorSelection">${floor} 도착지 선택</h2>
-        ${destinations.map(dest => `<button class="destination-button" data-destination="${dest}">${dest}</button>`).join("")}
-        <button class="close-btn" onclick="closeMap()">X</button>
-      `;
-      mapContainer.style.display = 'block';
-      applyTranslations();
-    }
-
-    function showStartSelection(destination) {
-      state.selectedDestination = destination;
-      const startSelection = document.getElementById('start-selection');
-      startSelection.innerHTML = `
-        <h2 data-translate="startSelection" data-destination="${destination}">시작점 선택 (도착지: ${destination})</h2>
-        <button class="start-point-btn" data-start="1F">1F</button>
-        <button class="start-point-btn" data-start="3F">3F</button>
-        <button class="close-btn" onclick="closeStartSelection()">X</button>
-      `;
-      startSelection.style.display = 'block';
-      applyTranslations();
-    }
 
     function playVideo(startPoint) {
       const videoFile = videoData[state.currentFloor]?.[state.selectedDestination]?.[startPoint];
       if (!videoFile) return alert("동영상이 없습니다.");
-      const videoSource = document.getElementById('video-source');
+      const videoSource = document.getElementById("video-source");
       videoSource.src = videoFile;
-      const videoPlayer = document.getElementById('video-player');
-      videoPlayer.load();
-      document.getElementById('video-container').style.display = 'block';
+      document.getElementById("video-player").load();
+      document.getElementById("video-container").style.display = "block";
     }
-
-    function closeMap() { document.getElementById('map-container').style.display = 'none'; }
-    function closeStartSelection() { document.getElementById('start-selection').style.display = 'none'; }
-    function closeVideo() { document.getElementById('video-player').pause(); document.getElementById('video-container').style.display = 'none'; }
   </script>
 </body>
 </html>
